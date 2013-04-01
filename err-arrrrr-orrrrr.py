@@ -24,7 +24,23 @@ class Orrrrr(BotPlugin):
 			r = requests.get("http://acronyms.silmaril.ie/cgi-bin/uncgi/xaa?" + args[0].strip("."))
 			element = etree.fromstring(r.text)
 			if int(element.find('found').attrib['n']) > 0:
-				return next(element.iter('acro')).find('expan').text
+				expanded = next(element.iter('acro')).find('expan').text
+				self.send(mess.getFrom(), expanded, message_type=mess.getType())
+				for word in expanded.split():
+					self.lookup(word, mess.getFrom(), mess.getType(), 0)
+				return "Done."
 			else:
 				return "Didn't find any definitions, sorry."
 		return "Whoa, something broke O_O"
+		
+	def lookup(self, term, fromwho, type, depth):
+		if depth < 5: # constant for now, might add config parameter later
+			r = requests.get("http://acronyms.silmaril.ie/cgi-bin/uncgi/xaa?" + term.strip(".()"))
+			element = etree.fromstring(r.text)
+			if int(element.find('found').attrib['n']) > 0:
+				expanded = next(element.iter('acro')).find('expan').text
+				self.send(fromwho, expanded, message_type=type)
+				for word in expanded.split():
+					self.lookup(word, fromwho, type, depth+1)
+		else:
+			self.send(fromwho, "Reached recursion limit.", message_type=type)
