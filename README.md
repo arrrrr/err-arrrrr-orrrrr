@@ -1,10 +1,9 @@
-err-skeleton
+err-arrrrr-orrrrr
 ============
 
-A skeleton for Err plugins. Use this to get started quickly.
+The Orrrrr recursive^3 recursor is a plugin for the err chatbot, specifically err with arrrrr modifications.
 
-Fork & rename, or just download the files, then edit to suit
-your own tastes.
+It looks up a given acronym at the Internet Acronym Server and continues recursively, if you so desire.
 
 Licence
 -------
